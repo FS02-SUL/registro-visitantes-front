@@ -1,35 +1,26 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-function App() {
-  const [count, setCount] = useState(0)
-
+import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
+import PDFDocument from './components/PDFDocument';
+import Ways from './routes';
+import { AuthContext } from './contexts/AuthContext';
+import { useState } from 'react';
+const App = () => {
+  const [estaLogado, setEstaLogado] = useState(true);
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {/* <PDFViewer>
+        <PDFDocument />
+      </PDFViewer> */}
+      {/* <PDFDownloadLink 
+        document={<PDFDocument />} 
+        fileName={'registros.pdf'}
+      >
+        Baixar PDF
+      </PDFDownloadLink> */}
+      <AuthContext.Provider value={{ estaLogado, setEstaLogado }}>
+        <Ways />
+      </AuthContext.Provider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
