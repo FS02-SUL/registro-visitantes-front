@@ -7,15 +7,6 @@ const App = () => {
   const [estaLogado, setEstaLogado] = useState(true);
   return (
     <>
-      {/* <PDFViewer>
-        <PDFDocument />
-      </PDFViewer> */}
-      {/* <PDFDownloadLink 
-        document={<PDFDocument />} 
-        fileName={'registros.pdf'}
-      >
-        Baixar PDF
-      </PDFDownloadLink> */}
       <AuthContext.Provider value={{ estaLogado, setEstaLogado }}>
         <Ways />
       </AuthContext.Provider>
