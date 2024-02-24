@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PDFDocument from "../../components/PDFDocument";
 import { useEffect, useState } from "react";
 import { Chart } from "primereact/chart";
+import { Api } from "../../services";
 
 const TelaAdminContainer = styled.section`
     padding: 60px;
@@ -50,6 +51,51 @@ const TelaAdmin = () => {
     const [chartDataPie, setChartDataPie] = useState({});
     const [chartOptionsPie, setChartOptionsPie] = useState({});
 
+    const visitantesPorGenero = async () => {
+        try {
+            const request = await Api.get("visitantes/total-por-genero");
+            const response = await request.data;
+            // CONFIGURAÇÕES DO CHART PIE
+
+            const dataPie = {
+                labels: response.map(r => r.genero),
+                datasets: [
+                    {
+                        data: response.map(r => r.total),
+                        backgroundColor: [
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgb(255, 159, 64)',
+                            'rgb(75, 192, 192)',
+                            'rgb(54, 162, 235)',
+                        ]
+                    }
+                ]
+            }
+            const optionsPie = {
+                plugins: {
+                    legend: {
+                        labels: {
+                            usePointStyle: true
+                        }
+                    }
+                }
+            };
+
+            setChartDataPie(dataPie);
+            setChartOptionsPie(optionsPie);
+        } catch (error) {
+            alert(error.message)   
+        }
+    }
+
+    useEffect(() => {
+        visitantesPorGenero();
+    }, []);
+
     useEffect(() => {
         const data = {
             labels: ['Q1', 'Q2', 'Q3', 'Q4'],
@@ -70,7 +116,21 @@ const TelaAdmin = () => {
                         'rgb(153, 102, 255)'
                       ],
                       borderWidth: 1
-                }
+                },
+                {
+                    label: 'teste label',
+                    data: [1000, 225, 652, 189],
+                    backgroundColor: [
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgb(255, 159, 64)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                    ]
+                },
             ]
         };
         const options = {
@@ -85,38 +145,6 @@ const TelaAdmin = () => {
         setChartData(data);
         setChartOptions(options);
 
-        // CONFIGURAÇÕES DO CHART PIE
-
-        const dataPie = {
-            labels: ['A', 'B', 'C'],
-            datasets: [
-                {
-                    data: [540, 325, 702],
-                    backgroundColor: [
-                        'rgba(255, 159, 64, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                    ],
-                    borderColor: [
-                        'rgb(255, 159, 64)',
-                        'rgb(75, 192, 192)',
-                        'rgb(54, 162, 235)',
-                    ]
-                }
-            ]
-        }
-        const optionsPie = {
-            plugins: {
-                legend: {
-                    labels: {
-                        usePointStyle: true
-                    }
-                }
-            }
-        };
-
-        setChartDataPie(dataPie);
-        setChartOptionsPie(optionsPie);
     }, []);
 
     return (
