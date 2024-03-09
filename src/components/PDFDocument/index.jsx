@@ -1,8 +1,18 @@
 import { Document, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
 import { Html } from "react-pdf-html";
 import brasao from './brasao-do-ceara.png';
+import { useEffect, useState } from "react";
+import { Api } from "../../services";
 
 const PDFDocument = () => {
+    const [dataGenero, setDataGenero] = useState([]);
+    const visitantesPorGenero = async () => {
+        const request = await Api.get("visitantes/total-por-genero");
+        setDataGenero(await request.data);
+    }
+    useEffect(() => {
+        visitantesPorGenero();
+    }, []);
 
     const tabela = `
         <html>
@@ -11,18 +21,14 @@ const PDFDocument = () => {
                     <td>Visitantes total</td>
                     <td>1000</td>
                 </tr>
-                <tr>
-                    <td>Visitantes masculinos</td>
-                    <td>200</td>
-                </tr>
-                <tr>
-                    <td>Visitantes femininos</td>
-                    <td>700</td>
-                </tr>
-                <tr>
-                    <td>Visitantes outros</td>
-                    <td>100</td>
-                </tr>
+                ${
+                    dataGenero.map(data => (
+                        `<tr>
+                            <td>Visitantes ${data.genero}</td>
+                            <td>${data.total}</td>
+                        </tr>`        
+                    ))
+                }
             </table>
         </html>
     `;
